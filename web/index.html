@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OS Memory Management Simulator</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="shell">
+    <div class="tabs">
+      <button class="tab active" data-target="allocation">Allocation</button>
+      <button class="tab" data-target="paging">Paging</button>
+      <button class="tab" data-target="translation">Address Translation</button>
+      <button class="tab" data-target="advanced">Advanced Memory</button>
+    </div>
+
+    <section id="allocation" class="module active">
+      <div class="panel">
+        <h2>Contiguous Allocation</h2>
+        <p class="muted">Run a sequence of allocation and free operations, or compare all four placement algorithms side by side on the same workload.</p>
+        <form id="allocation-form">
+          <div class="field-row">
+            <label>Total memory (KB)
+              <input type="number" name="total_memory" value="320" min="1" required>
+            </label>
+            <label>Preset scenario
+              <select name="preset" id="allocation-preset">
+                <option value="fragmentation_demo">Fragmentation demo</option>
+                <option value="balanced_mix">Balanced mix</option>
+                <option value="large_process_pressure">Large-process pressure</option>
+              </select>
+            </label>
+          </div>
+          <label>Allocation algorithm
+            <select name="algorithm">
+              <option value="first_fit">First Fit</option>
+              <option value="best_fit">Best Fit</option>
+              <option value="worst_fit">Worst Fit</option>
+              <option value="next_fit">Next Fit</option>
+            </select>
+          </label>
+          <label>Operations
+            <textarea name="operations">ALLOC P1 120
+ALLOC P2 80
+ALLOC P3 60
+FREE P2
+ALLOC P4 50
+ALLOC P5 30</textarea>
+          </label>
+          <div class="button-row">
+            <button class="primary" type="submit">Run Simulation</button>
+            <button class="secondary" type="button" id="allocation-compare">Compare All Allocation Algorithms</button>
+            <button class="ghost" type="button" id="allocation-load-preset">Load Preset</button>
+          </div>
+        </form>
+        <div class="hint-box">
+          <strong>Input format</strong>
+          <div class="muted">Use one operation per line. Example: <code>ALLOC P1 120</code> or <code>FREE P1</code>.</div>
+        </div>
+      </div>
+      <div class="panel result-shell" id="allocation-result">
+        <div class="empty">Run the allocation module to see memory blocks, fragmentation, and where each process is placed.</div>
+      </div>
+    </section>
+
+    <section id="paging" class="module">
+      <div class="panel">
+        <h2>Paging and Page Replacement</h2>
+        <p class="muted">Step through every page reference, or compare all replacement policies on the same reference string to see why page-fault counts differ.</p>
+        <form id="paging-form">
+          <div class="field-row">
+            <label>Number of frames
+              <input type="number" name="frame_count" value="3" min="1" required>
+            </label>
+            <label>Preset scenario
+              <select name="preset" id="paging-preset">
+                <option value="classic_string">Classic textbook string</option>
+                <option value="locality_demo">Locality of reference</option>
+                <option value="fault_heavy">Fault-heavy sequence</option>
+              </select>
+            </label>
+          </div>
+          <label>Replacement algorithm
+            <select name="algorithm">
+              <option value="fifo">FIFO</option>
+              <option value="lru">LRU</option>
+              <option value="optimal">Optimal</option>
+              <option value="second_chance">Second Chance</option>
+            </select>
+          </label>
+          <label>Reference string
+            <textarea name="reference_string">7 0 1 2 0 3 0 4 2 3 0 3 2</textarea>
+          </label>
+          <div class="button-row">
+            <button class="primary" type="submit">Run Simulation</button>
+            <button class="secondary" type="button" id="paging-compare">Compare All Paging Algorithms</button>
+            <button class="ghost" type="button" id="paging-load-preset">Load Preset</button>
+          </div>
+        </form>
+        <div class="hint-box">
+          <strong>What to watch</strong>
+          <div class="muted">Each step shows whether the page reference caused a hit or a fault, and which page was replaced when all frames were full.</div>
+        </div>
+      </div>
+      <div class="panel result-shell" id="paging-result">
+        <div class="empty">Run the paging module to see page hits, page faults, and frame contents evolve reference by reference.</div>
+      </div>
+    </section>
+
+    <section id="translation" class="module">
+      <div class="panel">
+        <h2>Logical to Physical Address Translation</h2>
+        <p class="muted">Break a logical address into page number and offset, then resolve it through the page table to show the final physical address or a page-fault condition.</p>
+        <form id="translation-form">
+          <div class="field-row">
+            <label>Page size (bytes)
+              <input type="number" name="page_size" value="64" min="1" required>
+            </label>
+            <label>Logical address
+              <input type="number" name="logical_address" value="130" min="0" required>
+            </label>
+          </div>
+          <label>Preset page table
+            <select name="preset" id="translation-preset">
+              <option value="fault_case">Page-fault case</option>
+              <option value="successful_lookup">Successful lookup</option>
+              <option value="higher_page">Higher page number</option>
+            </select>
+          </label>
+          <label>Page table
+            <textarea name="page_table">0:5,1:2,2:-,3:7</textarea>
+          </label>
+          <div class="button-row">
+            <button class="primary" type="submit">Translate Address</button>
+            <button class="ghost" type="button" id="translation-load-preset">Load Preset</button>
+          </div>
+        </form>
+      </div>
+      <div class="panel result-shell" id="translation-result">
+        <div class="empty">Run the translation module to see how page number, offset, and frame number combine into a physical address.</div>
+      </div>
+    </section>
+
+    <section id="advanced" class="module">
+      <div class="panel">
+        <h2>Advanced Memory Concepts</h2>
+        <p class="muted">These modules extend the simulator closer to real operating-system behavior: TLB lookup, demand paging, segmentation, and thrashing analysis.</p>
+
+        <form id="tlb-form">
+          <h3>TLB Translation</h3>
+          <div class="field-row">
+            <label>Page size
+              <input type="number" name="page_size" value="64" min="1" required>
+            </label>
+            <label>Logical address
+              <input type="number" name="logical_address" value="130" min="0" required>
+            </label>
+          </div>
+          <label>TLB entries
+            <textarea name="tlb">0:5,1:2</textarea>
+          </label>
+          <label>Page table
+            <textarea name="page_table">0:5,1:2,2:-,3:7</textarea>
+          </label>
+          <div class="button-row">
+            <button class="primary" type="submit">Run TLB Translation</button>
+          </div>
+        </form>
+
+        <form id="demand-form">
+          <h3>Demand Paging</h3>
+          <div class="field-row">
+            <label>Frames
+              <input type="number" name="frame_count" value="3" min="1" required>
+            </label>
+            <label>TLB size
+              <input type="number" name="tlb_size" value="2" min="0" required>
+            </label>
+          </div>
+          <label>Reference string
+            <textarea name="reference_string">7 0 1 2 0 3 0 4 2 3 0 3 2</textarea>
+          </label>
+          <div class="button-row">
+            <button class="primary" type="submit">Run Demand Paging</button>
+          </div>
+        </form>
+
+        <form id="segmentation-form">
+          <h3>Segmentation</h3>
+          <div class="field-row">
+            <label>Logical address
+              <input type="number" name="logical_address" value="274" min="0" required>
+            </label>
+            <label>Bits for offset
+              <input type="number" name="bits_for_offset" value="6" min="1" required>
+            </label>
+          </div>
+          <label>Segment table
+            <textarea name="segment_table">0:1000:40,1:2000:80,2:3000:70,4:4500:50</textarea>
+          </label>
+          <div class="button-row">
+            <button class="primary" type="submit">Run Segmentation</button>
+          </div>
+        </form>
+
+        <form id="multi-level-form">
+          <h3>Two-Level Paging</h3>
+          <div class="field-row">
+            <label>Page size
+              <input type="number" name="page_size" value="64" min="1" required>
+            </label>
+            <label>Bits for inner index
+              <input type="number" name="inner_bits" value="2" min="1" required>
+            </label>
+          </div>
+          <label>Logical address
+            <input type="number" name="logical_address" value="400" min="0" required>
+          </label>
+          <label>Two-level page map
+            <textarea name="page_map">1:2:9,1:3:11,2:0:-</textarea>
+          </label>
+          <div class="button-row">
+            <button class="primary" type="submit">Run Two-Level Paging</button>
+          </div>
+        </form>
+
+        <form id="thrashing-form">
+          <h3>Thrashing Analyzer</h3>
+          <div class="field-row">
+            <label>Algorithm
+              <select name="algorithm">
+                <option value="fifo">FIFO</option>
+                <option value="lru">LRU</option>
+                <option value="optimal">Optimal</option>
+                <option value="second_chance">Second Chance</option>
+              </select>
+            </label>
+            <label>Fault-rate threshold (%)
+              <input type="number" name="threshold" value="60" min="0" max="100" required>
+            </label>
+          </div>
+          <div class="field-row">
+            <label>Min frames
+              <input type="number" name="min_frames" value="2" min="1" required>
+            </label>
+            <label>Max frames
+              <input type="number" name="max_frames" value="6" min="1" required>
+            </label>
+          </div>
+          <label>Reference string
+            <textarea name="reference_string">1 2 3 4 1 2 5 1 2 3 4 5</textarea>
+          </label>
+          <div class="button-row">
+            <button class="primary" type="submit">Analyze Thrashing</button>
+          </div>
+        </form>
+      </div>
+      <div class="panel result-shell" id="advanced-result">
+        <div class="empty">Run one of the advanced modules to see TLB lookup, demand paging, segmentation, or thrashing analysis.</div>
+      </div>
+    </section>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

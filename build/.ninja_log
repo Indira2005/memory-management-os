@@ -1,0 +1,14 @@
+# ninja log v7
+6	1229	7977124636053691	CMakeFiles/simulator.dir/src/main.cpp.obj	4efb624b731e83fd
+40	1552	7977124636370169	CMakeFiles/simulator.dir/src/core/utils.cpp.obj	87b96db8e1e0afd2
+28	1806	7977124636233553	CMakeFiles/simulator.dir/src/core/json_utils.cpp.obj	a496c3708dcaefb4
+155	1819	7977124637676369	CMakeFiles/simulator.dir/src/simulators/segmentation_simulator.cpp.obj	4aa89f7edf3a6387
+52	1941	7977124636567292	CMakeFiles/simulator.dir/src/core/web_assets.cpp.obj	2340609062516c9
+93	1966	7977124636984903	CMakeFiles/simulator.dir/src/simulators/multi_level_paging_simulator.cpp.obj	c2513b3608f0df41
+107	2102	7977124637359506	CMakeFiles/simulator.dir/src/simulators/paging_simulator.cpp.obj	dae7aa9cfe8b8a5e
+80	2209	7977124636844009	CMakeFiles/simulator.dir/src/simulators/demand_paging_simulator.cpp.obj	e64e5abe6413e456
+65	2351	7977124636685590	CMakeFiles/simulator.dir/src/simulators/allocation_simulator.cpp.obj	fd445f7bbf617bcd
+1241	2739	7977124648568187	CMakeFiles/simulator.dir/src/simulators/thrashing_simulator.cpp.obj	84d65fbc47496771
+1553	2918	7977124651575928	CMakeFiles/simulator.dir/src/simulators/translation_simulator.cpp.obj	b5522bf12024a9f2
+16	4146	7977124636213431	CMakeFiles/simulator.dir/src/core/http_server.cpp.obj	2cfab771d497b60c
+4150	4478	7977124677536135	simulator.exe	c65092f2ff012063

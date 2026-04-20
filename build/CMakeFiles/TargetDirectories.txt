@@ -1,0 +1,3 @@
+C:/Users/rucha/Desktop/projects/os-memory-management/memory-management/c-cpp-version/build/CMakeFiles/simulator.dir
+C:/Users/rucha/Desktop/projects/os-memory-management/memory-management/c-cpp-version/build/CMakeFiles/edit_cache.dir
+C:/Users/rucha/Desktop/projects/os-memory-management/memory-management/c-cpp-version/build/CMakeFiles/rebuild_cache.dir
